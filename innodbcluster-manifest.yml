@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: innodbcluster-main-backup-nfs-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  nfs:
+    path: /mnt/storage/k3s-data/innodbcluster-main/backup
+    server: 192.168.88.99
+---
+apiVersion: v1 
+kind: PersistentVolumeClaim
+metadata:
+  name: innodbcluster-main-backup-nfs-pvc 
+spec:
+  accessModes:
+    - ReadWriteOnce 
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: nfs
+---
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: innodbcluster-main
+spec:
+  secretName: innodbcluster-main-secret
+  tlsUseSelfSigned: true
+  instances: 2
+  version: 8.0.29
+  router:
+    instances: 1
+    version: 8.0.29
+  datadirVolumeClaimTemplate:
+    accessModes: 
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupProfiles:
+    - name: innodbcluster-main-backup
+      dumpInstance:
+        storage:
+          persistentVolumeClaim:
+            claimName: innodbcluster-main-backup-nfs-pvc
+        backupSchedules:
+          - name: innodbcluster-main-backup-schedule
+            schedule: "0 0 * * *:"  # Daily at midnight
+            backupProfileName: innodbcluster-main-backup
+            enabled: true

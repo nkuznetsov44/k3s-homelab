@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foosrefmanagement-postgres
+  labels:
+    app: foosrefmanagement-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foosrefmanagement-postgres
+  template:
+    metadata:
+      labels:
+        app: foosrefmanagement-postgres
+    spec:
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: foosrefmanagement-pgdata-pvc
+      containers:
+        - name: foosrefmanagement-postgres
+          image: postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DEFAULT_DATABASE_PASSWORD
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DEFAULT_DATABASE_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DEFAULT_DATABASE_NAME
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pgdata

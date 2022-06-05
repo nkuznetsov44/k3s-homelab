@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foosrefmanagement-app
+  labels:
+    app: foosrefmanagement-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: foosrefmanagement-app
+  template:
+    metadata:
+      labels:
+        app: foosrefmanagement-app
+    spec:
+      volumes:
+        - name: staticfiles
+          persistentVolumeClaim:
+            claimName: foosrefmanagement-staticfiles-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: foosrefmanagement-media-pvc
+      containers:
+        - name: foosrefmanagement-app
+          image: nkuznetsov44/foosrefmanagement-app
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ENVIRONMENT
+              value: "DOCKER"
+            - name: DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
+                  key: DJANGO_DEBUG
+            - name: DEFAULT_DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
+                  key: DEFAULT_DATABASE_HOST
+            - name: DEFAULT_DATABASE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
+                  key: DEFAULT_DATABASE_PORT
+            - name: DJANGO_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
+                  key: DJANGO_ALLOWED_HOSTS
+            - name: DJANGO_CORS_ALLOWED_ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
+                  key: DJANGO_CORS_ALLOWED_ORIGINS
+            - name: DEFAULT_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DEFAULT_DATABASE_NAME
+            - name: DEFAULT_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DEFAULT_DATABASE_USER
+            - name: DEFAULT_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DEFAULT_DATABASE_PASSWORD
+            - name: DJANGO_SUPERUSER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DJANGO_SUPERUSER_EMAIL
+            - name: DJANGO_SUPERUSER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DJANGO_SUPERUSER_USERNAME
+            - name: DJANGO_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DJANGO_SUPERUSER_PASSWORD
+          volumeMounts:
+            - mountPath: /usr/src/app/staticfiles
+              name: staticfiles
+            - mountPath: /usr/src/app/media
+              name: media
