@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: deluge-config-pv
+spec:
+    accessModes:
+      - ReadWriteOnce
+    capacity:
+        storage: 50Mi
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs
+    nfs:
+      path: /mnt/storage/k3s-data/deluge/config
+      server: 192.168.88.99
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: deluge-config-pvc
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 50Mi
+    storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: deluge-downloads-pv
+spec:
+    accessModes:
+      - ReadWriteOnce
+    capacity:
+        storage: 1Ti
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs
+    nfs:
+      path: /mnt/fast-storage/media/deluge
+      server: 192.168.88.99
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: deluge-downloads-pvc
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 1Ti
+    storageClassName: nfs

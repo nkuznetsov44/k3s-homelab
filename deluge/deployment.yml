@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: deluge
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: deluge
+    template:
+        metadata:
+            labels:
+                app: deluge
+        spec:
+            volumes:
+                - name: deluge-downloads
+                  persistentVolumeClaim:
+                      claimName: deluge-downloads-pvc
+                - name: deluge-config
+                  persistentVolumeClaim:
+                      claimName: deluge-config-pvc
+            containers:
+                - name: deluge
+                  image: lscr.io/linuxserver/deluge
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 8112
+                        containerPort: 6881
+                  volumeMounts:
+                      - name: deluge-downloads
+                        mountPath: /downloads
+                      - name: deluge-config
+                        mountPath: /config
+                  env:
+                      - name: TZ
+                        value: "Europe/Moscow"
+                      - name: PUID
+                        value: "1003"
+                      - name: PGID
+                        value: "1002"
