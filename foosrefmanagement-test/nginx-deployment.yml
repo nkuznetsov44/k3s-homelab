@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foosrefmanagement-test-nginx
+  labels:
+    app: foosrefmanagement-test-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foosrefmanagement-test-nginx
+  template:
+    metadata:
+      labels:
+        app: foosrefmanagement-test-nginx
+    spec:
+      volumes:
+        - name: staticfiles
+          persistentVolumeClaim:
+            claimName: foosrefmanagement-test-staticfiles-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: foosrefmanagement-test-media-pvc
+      containers:
+        - name: foosrefmanagement-test-nginx
+          image: nkuznetsov44/foosrefmanagement-nginx:github-actions
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: APP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-test-secret
+                  key: APP_HOST
+          volumeMounts:
+            - mountPath: /usr/src/app/staticfiles
+              name: staticfiles
+            - mountPath: /usr/src/app/media
+              name: media

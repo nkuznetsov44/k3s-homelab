@@ -23,7 +23,8 @@ spec:
             claimName: foosrefmanagement-media-pvc
       containers:
         - name: foosrefmanagement-nginx
-          image: nkuznetsov44/foosrefmanagement-nginx
+          image: nkuznetsov44/foosrefmanagement-nginx:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           volumeMounts:

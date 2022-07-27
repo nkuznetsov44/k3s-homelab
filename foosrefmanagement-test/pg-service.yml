@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: foosrefmanagement-test-postgres
+spec:
+  selector:
+    app: foosrefmanagement-test-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: foosrefmanagement-test-pgdata-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  nfs:
+    path: /mnt/storage/k3s-data/foosrefmanagement-test/pgdata
+    server: 192.168.88.99
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: foosrefmanagement-test-media-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 2Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  nfs:
+    path: /mnt/storage/k3s-data/foosrefmanagement-test/media
+    server: 192.168.88.99
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: foosrefmanagement-test-staticfiles-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  nfs:
+    path: /mnt/storage/k3s-data/foosrefmanagement-test/staticfiles
+    server: 192.168.88.99
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: foosrefmanagement-test-pgdata-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: foosrefmanagement-test-media-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: foosrefmanagement-test-staticfiles-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: nfs

@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: foosrefmanagement-app
+  name: foosrefmanagement-test-app
   labels:
-    app: foosrefmanagement-app
+    app: foosrefmanagement-test-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: foosrefmanagement-app
+      app: foosrefmanagement-test-app
   template:
     metadata:
       labels:
-        app: foosrefmanagement-app
+        app: foosrefmanagement-test-app
     spec:
       volumes:
         - name: staticfiles
           persistentVolumeClaim:
-            claimName: foosrefmanagement-staticfiles-pvc
+            claimName: foosrefmanagement-test-staticfiles-pvc
         - name: media
           persistentVolumeClaim:
-            claimName: foosrefmanagement-media-pvc
+            claimName: foosrefmanagement-test-media-pvc
       containers:
-        - name: foosrefmanagement-app
-          image: nkuznetsov44/foosrefmanagement-app:latest
+        - name: foosrefmanagement-test-app
+          image: nkuznetsov44/foosrefmanagement-app:github-actions
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -33,62 +33,62 @@ spec:
             - name: DEBUG
               valueFrom:
                 configMapKeyRef:
-                  name: foosrefmanagement-configmap
+                  name: foosrefmanagement-test-configmap
                   key: DJANGO_DEBUG
             - name: DEFAULT_DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: foosrefmanagement-configmap
+                  name: foosrefmanagement-test-configmap
                   key: DEFAULT_DATABASE_HOST
             - name: DEFAULT_DATABASE_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: foosrefmanagement-configmap
+                  name: foosrefmanagement-test-configmap
                   key: DEFAULT_DATABASE_PORT
             - name: DJANGO_ALLOWED_HOSTS
               valueFrom:
                 configMapKeyRef:
-                  name: foosrefmanagement-configmap
+                  name: foosrefmanagement-test-configmap
                   key: DJANGO_ALLOWED_HOSTS
             - name: DJANGO_CORS_ALLOWED_ORIGINS
               valueFrom:
                 configMapKeyRef:
-                  name: foosrefmanagement-configmap
+                  name: foosrefmanagement-test-configmap
                   key: DJANGO_CORS_ALLOWED_ORIGINS
             - name: DEFAULT_DATABASE_NAME
               valueFrom:
                 secretKeyRef:
-                  name: foosrefmanagement-secret
+                  name: foosrefmanagement-test-secret
                   key: DEFAULT_DATABASE_NAME
             - name: DEFAULT_DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: foosrefmanagement-secret
+                  name: foosrefmanagement-test-secret
                   key: DEFAULT_DATABASE_USER
             - name: DEFAULT_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: foosrefmanagement-secret
+                  name: foosrefmanagement-test-secret
                   key: DEFAULT_DATABASE_PASSWORD
             - name: DJANGO_SUPERUSER_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: foosrefmanagement-secret
+                  name: foosrefmanagement-test-secret
                   key: DJANGO_SUPERUSER_EMAIL
             - name: DJANGO_SUPERUSER_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: foosrefmanagement-secret
+                  name: foosrefmanagement-test-secret
                   key: DJANGO_SUPERUSER_USERNAME
             - name: DJANGO_SUPERUSER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: foosrefmanagement-secret
+                  name: foosrefmanagement-test-secret
                   key: DJANGO_SUPERUSER_PASSWORD
             - name: TELEGRAM_BOT_API_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: foosrefmanagement-secret
+                  name: foosrefmanagement-test-secret
                   key: TELEGRAM_BOT_API_TOKEN
           volumeMounts:
             - mountPath: /usr/src/app/staticfiles

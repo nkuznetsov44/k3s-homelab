@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: foosrefmanagement-test-app
+spec:
+  selector:
+    app: foosrefmanagement-test-app
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
