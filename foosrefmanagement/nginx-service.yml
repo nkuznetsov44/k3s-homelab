@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: foosrefmanagement-nginx
 spec:
-  type: LoadBalancer
+  type: NodePort
   loadBalancerIP: 192.168.10.1
   selector:
     app: foosrefmanagement-nginx
@@ -11,3 +11,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+      nodePort: 30101

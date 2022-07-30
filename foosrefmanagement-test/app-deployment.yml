@@ -90,6 +90,11 @@ spec:
                 secretKeyRef:
                   name: foosrefmanagement-test-secret
                   key: TELEGRAM_BOT_API_TOKEN
+            - name: APP_EXTERNAL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-test-secret
+                  key: APP_EXTERNAL_HOST
           volumeMounts:
             - mountPath: /usr/src/app/staticfiles
               name: staticfiles

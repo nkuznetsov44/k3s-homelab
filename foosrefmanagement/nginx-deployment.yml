@@ -23,10 +23,21 @@ spec:
             claimName: foosrefmanagement-media-pvc
       containers:
         - name: foosrefmanagement-nginx
-          image: nkuznetsov44/foosrefmanagement-nginx:latest
+          image: nkuznetsov44/foosrefmanagement-nginx:github-actions
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+          env:
+            - name: APP_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
+                  key: APP_HOST
+            - name: TELEGRAM_BOT_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
+                  key: TELEGRAM_BOT_NAME
           volumeMounts:
             - mountPath: /usr/src/app/staticfiles
               name: staticfiles

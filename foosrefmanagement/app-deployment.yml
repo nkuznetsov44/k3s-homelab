@@ -23,7 +23,7 @@ spec:
             claimName: foosrefmanagement-media-pvc
       containers:
         - name: foosrefmanagement-app
-          image: nkuznetsov44/foosrefmanagement-app:latest
+          image: nkuznetsov44/foosrefmanagement-app:github-actions
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: foosrefmanagement-configmap
-                  key: DJANGO_DEBUG
+                  key: DEBUG
             - name: DEFAULT_DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
@@ -50,15 +50,15 @@ spec:
                 configMapKeyRef:
                   name: foosrefmanagement-configmap
                   key: DJANGO_ALLOWED_HOSTS
-            - name: DJANGO_CORS_ALLOWED_ORIGINS
+            - name: APP_EXTERNAL_HOST
               valueFrom:
                 configMapKeyRef:
                   name: foosrefmanagement-configmap
-                  key: DJANGO_CORS_ALLOWED_ORIGINS
+                  key: APP_EXTERNAL_HOST
             - name: DEFAULT_DATABASE_NAME
               valueFrom:
-                secretKeyRef:
-                  name: foosrefmanagement-secret
+                configMapKeyRef:
+                  name: foosrefmanagement-configmap
                   key: DEFAULT_DATABASE_NAME
             - name: DEFAULT_DATABASE_USER
               valueFrom:
@@ -70,16 +70,6 @@ spec:
                 secretKeyRef:
                   name: foosrefmanagement-secret
                   key: DEFAULT_DATABASE_PASSWORD
-            - name: DJANGO_SUPERUSER_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  name: foosrefmanagement-secret
-                  key: DJANGO_SUPERUSER_EMAIL
-            - name: DJANGO_SUPERUSER_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: foosrefmanagement-secret
-                  key: DJANGO_SUPERUSER_USERNAME
             - name: DJANGO_SUPERUSER_PASSWORD
               valueFrom:
                 secretKeyRef:
