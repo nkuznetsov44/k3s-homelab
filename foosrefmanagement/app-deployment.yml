@@ -70,11 +70,21 @@ spec:
                 secretKeyRef:
                   name: foosrefmanagement-secret
                   key: DEFAULT_DATABASE_PASSWORD
+            - name: DJANGO_SUPERUSER_TELEGRAM_ID
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DJANGO_SUPERUSER_TELEGRAM_ID
             - name: DJANGO_SUPERUSER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: foosrefmanagement-secret
                   key: DJANGO_SUPERUSER_PASSWORD
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: foosrefmanagement-secret
+                  key: DJANGO_SECRET_KEY
             - name: TELEGRAM_BOT_API_TOKEN
               valueFrom:
                 secretKeyRef:

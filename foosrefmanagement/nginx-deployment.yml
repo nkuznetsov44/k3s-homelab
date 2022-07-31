@@ -33,11 +33,6 @@ spec:
                 configMapKeyRef:
                   name: foosrefmanagement-configmap
                   key: APP_HOST
-            - name: TELEGRAM_BOT_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: foosrefmanagement-configmap
-                  key: TELEGRAM_BOT_NAME
           volumeMounts:
             - mountPath: /usr/src/app/staticfiles
               name: staticfiles
