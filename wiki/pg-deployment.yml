@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikijs-postgres
+  labels:
+    app: wikijs-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikijs-postgres
+  template:
+    metadata:
+      labels:
+        app: wikijs-postgres
+    spec:
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: wikijs-pgdata-pvc
+      containers:
+        - name: wikijs-postgres
+          image: postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wikijs-secret
+                  key: DB_PASS
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: wikijs-secret
+                  key: DB_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: wikijs-secret
+                  key: DB_NAME
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pgdata
