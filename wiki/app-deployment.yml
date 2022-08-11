@@ -14,11 +14,18 @@ spec:
       labels:
         app: wikijs
     spec:
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: wikijs-assets-pvc
       containers:
         - name: wikijs
           image: ghcr.io/requarks/wiki:2
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - mountPath: /usr/wikijs/assets
+              name: assets
           env:
             - name: DB_TYPE
               value: "postgres"
